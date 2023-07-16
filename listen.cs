@@ -22,15 +22,9 @@ internal class Program
         await mqttClient.ConnectAsync(options);
 
         Console.WriteLine("Connected successfully with MQTT Brokers.");
-        // Subscribe to the topic
-        var mqttFactory = new MqttFactory();
-        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(
-                    f => { f.WithTopic("canbus/#"); }).Build()
-            ;
-        await mqttClient.SubscribeAsync(mqttSubscribeOptions);
-        Console.WriteLine("Subscribed");
 
+        await mqttClient.SubscribeAsync("canbus/#");
+        Console.WriteLine("Subscribed");
         mqttClient.ApplicationMessageReceivedAsync += e =>
         {
             Console.WriteLine($"Id = {e.ApplicationMessage.Topic.Split('/')[1]}");
